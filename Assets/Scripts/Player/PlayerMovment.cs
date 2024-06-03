@@ -1,16 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovment : MonoBehaviour
 {
-    [SerializeField] private DynamicJoystick dynanicJoystick;
+    public enum PlayerId { P1, P2 };
+
+    [SerializeField] private PlayerId playerId;
+    [SerializeField] private InputsManager inputManager;
     [SerializeField] private float movmentSpeed;
     [SerializeField] private float yClampValue;
+    private DynamicJoystick ownJoystick;
 
-    void Start()
+
+    private void Start()
     {
-
+        GetOwnJoyStick();
     }
 
     void Update()
@@ -20,12 +26,64 @@ public class PlayerMovment : MonoBehaviour
 
     private void Move()
     {
-        Vector2 playerPos = transform.position;
+        Vector3 playerPos = transform.position;
+#if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS       
+        MovmentMobile(playerPos);
+#endif
+#if UNITY_STANDALONE_WIN
+         MovmentPc(playerPos);
+#endif
+    }
 
-        playerPos += movmentSpeed * Time.deltaTime * new Vector2(0f, dynanicJoystick.Direction.y);
+    private void MovmentPc(Vector2 playerPos)
+    {
+        if (playerId == PlayerId.P1)
+        {
+            MovmentWithPcInputs(playerPos, Input.GetKey(KeyCode.UpArrow), Input.GetKey(KeyCode.DownArrow));
+        }
 
-        playerPos.y = Mathf.Clamp(playerPos.y, -yClampValue, yClampValue);
+        else if (playerId == PlayerId.P2)
+        {
+            MovmentWithPcInputs(playerPos, Input.GetKey(KeyCode.W), Input.GetKey(KeyCode.S));
+        }
 
-        transform.position = playerPos;
+    }
+
+    private void MovmentWithPcInputs(Vector2 playerPos, bool v, bool v1)
+    {
+        if (v)
+        {
+            playerPos += new Vector2(0f, movmentSpeed * Time.deltaTime);
+        }
+        else if (v1)
+        {
+            playerPos -= new Vector2(0f, movmentSpeed * Time.deltaTime);
+        }
+
+        ApplyPosition(playerPos);
+    }
+
+    private void MovmentMobile(Vector2 playerPos)
+    {
+        playerPos += movmentSpeed * Time.deltaTime * new Vector2(0f, ownJoystick.Direction.y);
+        ApplyPosition(playerPos);
+    }
+
+    private void ApplyPosition(Vector2 finalPos)
+    {
+        finalPos.y = Mathf.Clamp(finalPos.y, -yClampValue, yClampValue);
+        transform.position = finalPos;
+    }
+
+    private void GetOwnJoyStick()
+    {
+        foreach (var input in inputManager.Inputs)
+        {
+            if (input.playerId == this.playerId)
+            {
+                ownJoystick = input.joystick;
+                break;
+            }
+        }
     }
 }
