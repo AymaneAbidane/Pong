@@ -36,7 +36,6 @@ public class GamePlayManager : MonoBehaviour
 
     private void ResetGamePlay()
     {
-        mainball.ResetPosition();
         mainball.SetCanMove(false);
         foreach (var player in scenePlayers)
         {

@@ -12,10 +12,11 @@ public class Ball : MonoBehaviour
     private const string PLAYERS_TAG_STRING = "Player";
 
     private Vector2 direction;
-    private bool canMove = true;
+    private bool canMove;
 
     void Start()
     {
+        canMove = true;
         direction = Vector2.one.normalized;
     }
 
@@ -24,6 +25,10 @@ public class Ball : MonoBehaviour
         if (canMove == true)
         {
             ownRb.velocity = direction * ballSpeed * Time.fixedDeltaTime;
+        }
+        else
+        {
+            transform.position = Vector2.zero;
         }
     }
 
@@ -43,12 +48,6 @@ public class Ball : MonoBehaviour
     {
         canMove = v;
     }
-
-    public void ResetPosition()
-    {
-        transform.position = Vector2.zero;
-    }
-
     public void SetRandomDirection()
     {
         float value = UnityEngine.Random.value;
