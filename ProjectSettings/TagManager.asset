@@ -5,16 +5,17 @@ TagManager:
   serializedVersion: 2
   tags:
   - SideWalls
+  - Ball
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - ScoreBorders
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Ball
+  - Player
+  - WallBorders
   - 
   - 
   - 

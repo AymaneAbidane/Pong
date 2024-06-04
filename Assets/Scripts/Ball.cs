@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class Ball : MonoBehaviour
     private const string PLAYERS_TAG_STRING = "Player";
 
     private Vector2 direction;
+    private bool canMove = true;
+
     void Start()
     {
         direction = Vector2.one.normalized;
@@ -18,7 +21,10 @@ public class Ball : MonoBehaviour
 
     void FixedUpdate()
     {
-        ownRb.velocity = direction * ballSpeed * Time.fixedDeltaTime;
+        if (canMove == true)
+        {
+            ownRb.velocity = direction * ballSpeed * Time.fixedDeltaTime;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -29,6 +35,26 @@ public class Ball : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag(PLAYERS_TAG_STRING))
         {
+            direction.x = -direction.x;
+        }
+    }
+
+    public void SetCanMove(bool v)
+    {
+        canMove = v;
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = Vector2.zero;
+    }
+
+    public void SetRandomDirection()
+    {
+        float value = UnityEngine.Random.value;
+        if (value <= 0.5f)
+        {
+            direction.y = -direction.y;
             direction.x = -direction.x;
         }
     }

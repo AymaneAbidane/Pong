@@ -12,10 +12,11 @@ public class PlayerMovment : MonoBehaviour
     [SerializeField] private float movmentSpeed;
     [SerializeField] private float yClampValue;
     private DynamicJoystick ownJoystick;
-
+    private Vector2 initialPos;
 
     private void Start()
     {
+        initialPos = transform.position;
         GetOwnJoyStick();
     }
 
@@ -85,5 +86,10 @@ public class PlayerMovment : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = initialPos;
     }
 }
