@@ -9,7 +9,7 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField] private PlayerMovment[] scenePlayers;
     [SerializeField] private Ball mainball;
     [SerializeField] private float delayBeforTheBallCanMove;
-
+    [SerializeField] private bool vsAi;
     private void Awake()
     {
         scoreManager.onOnePlayerScorepoint += ScoreManager_onOnePlayerScorepoint;
@@ -40,6 +40,10 @@ public class GamePlayManager : MonoBehaviour
         foreach (var player in scenePlayers)
         {
             player.ResetPosition();
+            if (vsAi)
+            {
+                break;
+            }
         }
 
     }
