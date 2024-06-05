@@ -31,8 +31,8 @@ public class PlayerMovment : MonoBehaviour
 #if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS       
         MovmentMobile(playerPos);
 #endif
-#if UNITY_STANDALONE_WIN
-         MovmentPc(playerPos);
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+        MovmentPc(playerPos);
 #endif
     }
 
